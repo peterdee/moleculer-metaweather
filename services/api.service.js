@@ -1,16 +1,13 @@
-"use strict";
+'use strict';
 
-const ApiGateway = require("moleculer-web");
+const APIGateway = require('moleculer-web');
+const jwt = require('jsonwebtoken');
 
-/**
- * @typedef {import('moleculer').Context} Context Moleculer's Context
- * @typedef {import('http').IncomingMessage} IncomingRequest Incoming HTTP Request
- * @typedef {import('http').ServerResponse} ServerResponse HTTP Server Response
- */
+const { AUTH_SECRET = '' } = require('../config');
 
 module.exports = {
 	name: "api",
-	mixins: [ApiGateway],
+	mixins: [APIGateway],
 
 	// More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html
 	settings: {
@@ -36,11 +33,7 @@ module.exports = {
 
 				// Enable/disable parameter merging method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Disable-merging
 				mergeParams: true,
-
-				// Enable authentication. Implement the logic into `authenticate` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authentication
-				authentication: false,
-
-				// Enable authorization. Implement the logic into `authorize` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authorization
+				authentication: true,
 				authorization: false,
 
 				// The auto-alias feature allows you to declare your route alias directly in your services.
@@ -107,62 +100,35 @@ module.exports = {
 	},
 
 	methods: {
-
 		/**
-		 * Authenticate the request. It check the `Authorization` token value in the request header.
-		 * Check the token value & resolve the user by the token.
-		 * The resolved user will be available in `ctx.meta.user`
-		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
+		 * Authenticate the request
+		 * @param {object} ctx - context object
+		 * @param {Object} route - route object
+		 * @param {object} request - request object
+		 * @returns {Promise<void>}
 		 */
-		async authenticate(ctx, route, req) {
-			// Read the token from header
-			const auth = req.headers["authorization"];
+		async authenticate(ctx, route, request) {
+      try {
+        // check if token was provided
+        const { headers: { 'x-access-token': token = '' } = {} } = request;
+        if (!token) {
+          throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
+        }
 
-			if (auth && auth.startsWith("Bearer")) {
-				const token = auth.slice(7);
+        // decode the token
+        const decoded = await jwt.verify(auth, AUTH_SECRET);
+        const { provider = '' } = decoded || {};
+        if (!provider) {
+					throw new APIGateway.Errors.UnAuthorizedError(APIGateway.Errors.ERR_INVALID_TOKEN);
+        }
 
-				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
-					// Returns the resolved user. It will be set to the `ctx.meta.user`
-					return { id: 1, name: "John Doe" };
-
-				} else {
-					// Invalid token
-					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
-				}
-
-			} else {
-				// No token. Throw an error or do nothing if anonymous access is allowed.
-				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
-				return null;
-			}
+        return {
+          authenticated: true,
+          provider,
+        };
+      } catch (error) {
+        throw new APIGateway.Errors.UnAuthorizedError(APIGateway.Errors.ERR_INVALID_TOKEN);
+      }
 		},
-
-		/**
-		 * Authorize the request. Check that the authenticated user has right to access the resource.
-		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
-		 */
-		async authorize(ctx, route, req) {
-			// Get the authenticated user.
-			const user = ctx.meta.user;
-
-			// It check the `auth` property in action schema.
-			if (req.$action.auth == "required" && !user) {
-				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
-			}
-		}
-
-	}
+	},
 };
