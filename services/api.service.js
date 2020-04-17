@@ -3,27 +3,23 @@
 const APIGateway = require('moleculer-web');
 const jwt = require('jsonwebtoken');
 
-const { AUTH_SECRET = '' } = require('../config');
+const { AUTH_SECRET = '', PORT = 5544 } = require('../config');
 
 module.exports = {
-	name: "api",
+	name: 'api',
 	mixins: [APIGateway],
 
 	// More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html
 	settings: {
-		// Exposed port
-		port: process.env.PORT || 3000,
-
-		// Exposed IP
-		ip: "0.0.0.0",
+		port: PORT,
+		ip: '0.0.0.0',
 
 		// Global Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
 		use: [],
 
 		routes: [
 			{
-				path: "/api",
-
+				path: '/api',
 				whitelist: [
 					"**"
 				],
@@ -33,7 +29,7 @@ module.exports = {
 
 				// Enable/disable parameter merging method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Disable-merging
 				mergeParams: true,
-				authentication: true,
+				authentication: false,
 				authorization: false,
 
 				// The auto-alias feature allows you to declare your route alias directly in your services.
@@ -99,18 +95,18 @@ module.exports = {
 		logResponseData: null,
 	},
 
-	methods: {
-		/**
-		 * Authenticate the request
-		 * @param {object} ctx - context object
-		 * @param {Object} route - route object
-		 * @param {object} request - request object
-		 * @returns {Promise<void>}
-		 */
-		async authenticate(ctx, route, request) {
+  methods: {
+    /**
+     * Authenticate the request
+     * @param {object} ctx - context object
+     * @param {Object} route - route object
+     * @param {object} request - request object
+     * @returns {Promise<void>}
+     */
+    async authenticate(ctx, route, request) {
       try {
         // check if token was provided
-        const { headers: { 'x-access-token': token = '' } = {} } = request;
+        const { headers: { 'x-auth': token = '' } = {} } = request;
         if (!token) {
           throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
         }
@@ -119,7 +115,7 @@ module.exports = {
         const decoded = await jwt.verify(auth, AUTH_SECRET);
         const { provider = '' } = decoded || {};
         if (!provider) {
-					throw new APIGateway.Errors.UnAuthorizedError(APIGateway.Errors.ERR_INVALID_TOKEN);
+          throw new APIGateway.Errors.UnAuthorizedError(APIGateway.Errors.ERR_INVALID_TOKEN);
         }
 
         return {
