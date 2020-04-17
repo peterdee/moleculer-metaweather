@@ -1,9 +1,10 @@
 'use strict';
 
 const APIGateway = require('moleculer-web');
+const { Errors: { MoleculerRetryableError: ClientError } } = require('moleculer');
 const jwt = require('jsonwebtoken');
 
-const { AUTH_SECRET = '', PORT = 5544 } = require('../config');
+const config = require('../config');
 
 module.exports = {
 	name: 'api',
@@ -11,7 +12,7 @@ module.exports = {
 
 	// More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html
 	settings: {
-		port: PORT,
+		port: config.PORT,
 		ip: '0.0.0.0',
 
 		// Global Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
@@ -29,7 +30,7 @@ module.exports = {
 
 				// Enable/disable parameter merging method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Disable-merging
 				mergeParams: true,
-				authentication: false,
+				authentication: true,
 				authorization: false,
 
 				// The auto-alias feature allows you to declare your route alias directly in your services.
@@ -101,21 +102,29 @@ module.exports = {
      * @param {object} ctx - context object
      * @param {Object} route - route object
      * @param {object} request - request object
-     * @returns {Promise<void>}
+     * @returns {Promise<MoleculerRetryableError|object>}
      */
     async authenticate(ctx, route, request) {
       try {
         // check if token was provided
         const { headers: { 'x-auth': token = '' } = {} } = request;
         if (!token) {
-          throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
+          throw new ClientError(
+            config.ERROR_MESSAGES.missingAuth,
+            config.RESPONSE_CODES[401],
+            config.ERROR_TYPES.accessDenied,
+          );
         }
 
         // decode the token
-        const decoded = await jwt.verify(auth, AUTH_SECRET);
+        const decoded = await jwt.verify(auth, config.AUTH_SECRET);
         const { provider = '' } = decoded || {};
         if (!provider) {
-          throw new APIGateway.Errors.UnAuthorizedError(APIGateway.Errors.ERR_INVALID_TOKEN);
+          throw new ClientError(
+            config.ERROR_MESSAGES.invalidAuth,
+            config.RESPONSE_CODES[401],
+            config.ERROR_TYPES.accessDenied,
+          );
         }
 
         return {
@@ -123,7 +132,15 @@ module.exports = {
           provider,
         };
       } catch (error) {
-        throw new APIGateway.Errors.UnAuthorizedError(APIGateway.Errors.ERR_INVALID_TOKEN);
+        const { message = '' } = error;
+        if (message && message === config.ERROR_MESSAGES.missingAuth) {
+          throw error;
+        }
+        throw new ClientError(
+          config.ERROR_MESSAGES.invalidAuth,
+          config.RESPONSE_CODES[401],
+          config.ERROR_TYPES.accessDenied,
+        );
       }
 		},
 	},

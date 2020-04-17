@@ -1,8 +1,13 @@
 {
   "name": "moleculer-metaweather",
-  "author": "",
   "version": "1.0.0",
-  "description": "My Moleculer-based microservices project",
+  "private": true,
+  "author": {
+    "name": "Peter Dyumin",
+    "url": "https://github.com/peterdee"
+  },
+  "description": "",
+  "homepage": "https://github.com/peterdee/moleculer-metaweather",
   "scripts": {
     "dev": "moleculer-runner --env --repl --hot services/**/*.service.js",
     "start": "moleculer-runner",
@@ -12,11 +17,18 @@
     "dc:down": "docker-compose down"
   },
   "engines": {
-    "node": "12.16.1"
+    "node": "12.16.1",
+    "npm": "6.14.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterdee/moleculer-metaweather"
   },
   "keywords": [
-    "microservice",
-    "moleculer"
+    "MetaWeather",
+    "Microservice",
+    "Moleculer",
+    "Node"
   ],
   "dependencies": {
     "axios": "^0.19.2",
