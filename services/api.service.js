@@ -2,10 +2,10 @@
 
 const APIGateway = require('moleculer-web');
 const compression = require('compression');
-const { Errors: { MoleculerRetryableError: ClientError } } = require('moleculer');
 const helmet = require('helmet');
 const jwt = require('jsonwebtoken');
 
+const clientError = require('../utilities/client-error');
 const config = require('../config');
 
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
 				],
 
         mergeParams: true,
-				authentication: false,
+				authentication: config.AUTH_ENABLED,
 				authorization: false,
 				autoAliases: true,
         bodyParsers: {
@@ -67,7 +67,7 @@ module.exports = {
       // check if token was provided
       const { headers: { 'x-auth': token = '' } = {} } = request;
       if (!token) {
-        throw new ClientError(
+        throw clientError(
           config.ERROR_MESSAGES.missingAuth,
           config.RESPONSE_CODES[401],
         );
@@ -78,7 +78,7 @@ module.exports = {
         const decoded = await jwt.verify(auth, config.AUTH_SECRET);
         const { provider = '' } = decoded || {};
         if (!provider) {
-          throw new ClientError(
+          throw clientError(
             config.ERROR_TYPES.accessDenied,
             config.RESPONSE_CODES[401],
           );
@@ -89,7 +89,7 @@ module.exports = {
           provider,
         };
       } catch (error) {
-        throw new ClientError(
+        throw clientError(
           config.ERROR_TYPES.accessDenied,
           config.RESPONSE_CODES[401],
         );

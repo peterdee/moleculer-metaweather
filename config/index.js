@@ -1,6 +1,7 @@
 const { env: environment = {} } = process;
 
 module.exports = {
+  AUTH_ENABLED: environment.APP_AUTH_ENABLED === 'true',
   AUTH_SECRET: environment.APP_AUTH_SECRET,
   ERROR_MESSAGES: {
     internalServerError: 'INTERNAL_SERVER_ERROR',
