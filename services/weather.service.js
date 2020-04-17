@@ -44,6 +44,38 @@ module.exports = {
           );
         }
 			},
+    },
+    city: {
+			rest: {
+        method: 'GET',
+        params: {
+          search: 'string',
+        },
+				path: '/city'
+			},
+			async handler(ctx) {
+        // check the search request
+        const { params: { id = '' } = {} } = ctx;
+        if (!id) {
+          throw clientError(
+            config.ERROR_MESSAGES.missingData,
+            config.RESPONSE_CODES[400],
+          );
+        }
+
+        try {
+          const { data } = await axios({
+            method: 'GET',
+            url: `https://www.metaweather.com/api/location/${id}`,
+          });
+          return formatResponse(data);
+        } catch (error) {
+          throw serverError(
+            config.ERROR_MESSAGES.internalServerError,
+            config.RESPONSE_CODES[500],
+          );
+        }
+			},
 		},
 	},
 };
