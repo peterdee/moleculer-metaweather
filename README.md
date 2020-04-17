@@ -1,4 +1,7 @@
 ## moleculer-metaweather
+
+[![Known Vulnerabilities](https://snyk.io/test/github/peterdee/moleculer-metaweather/badge.svg?targetFile=package.json)](https://snyk.io/test/github/peterdee/moleculer-metaweather?targetFile=package.json)
+
 This is a [Moleculer](https://moleculer.services/)-based microservices project. Generated with the [Moleculer CLI](https://moleculer.services/docs/0.14/moleculer-cli.html).
 
 ### Usage
