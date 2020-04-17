@@ -54,7 +54,7 @@ module.exports = {
 				path: '/city'
 			},
 			async handler(ctx) {
-        // check the search request
+        // check the city identifier
         const { params: { id = '' } = {} } = ctx;
         if (!id) {
           throw clientError(
