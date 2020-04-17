@@ -1,14 +1,11 @@
 'use strict';
 
 const axios = require('axios');
-const {
-  Errors: {
-    MoleculerRetryableError: ClientError,
-    MoleculerServerError: ServerError,
-  },
-} = require('moleculer');
 
+const clientError = require('../utilities/client-error');
+const formatResponse = require('../utilities/format-response');
 const config = require('../config');
+const serverError = require('../utilities/server-error');
 
  /**
   * Weather service
@@ -28,7 +25,7 @@ module.exports = {
         // check the search request
         const { params: { search = '' } = {} } = ctx;
         if (!search) {
-          throw new ClientError(
+          throw clientError(
             config.ERROR_MESSAGES.missingData,
             config.RESPONSE_CODES[400],
           );
@@ -39,9 +36,9 @@ module.exports = {
             method: 'GET',
             url: `https://www.metaweather.com/api/location/search/?query=${search}`,
           });
-          return data;
+          return formatResponse(data);
         } catch (error) {
-          throw new ServerError(
+          throw serverError(
             config.ERROR_MESSAGES.internalServerError,
             config.RESPONSE_CODES[500],
           );
