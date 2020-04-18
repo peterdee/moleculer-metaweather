@@ -9,9 +9,9 @@
   "description": "",
   "homepage": "https://github.com/peterdee/moleculer-metaweather",
   "scripts": {
-    "dev": "moleculer-runner --env --repl --hot services/**/*.service.js",
-    "start": "moleculer-runner",
-    "cli": "moleculer connect ",
+    "dev": "NODE_ENV=development moleculer-runner --env --repl --hot services/**/*.service.js",
+    "start": "NODE_ENV=production moleculer-runner --env",
+    "cli": "moleculer connect",
     "dc:up": "docker-compose up --build -d",
     "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"
@@ -37,7 +37,8 @@
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "moleculer": "^0.14.0",
-    "moleculer-web": "^0.9.0"
+    "moleculer-web": "^0.9.0",
+    "nats": "^1.4.8"
   },
   "devDependencies": {
     "moleculer-repl": "^0.6.2"
