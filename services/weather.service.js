@@ -11,7 +11,7 @@ const serverError = require('../utilities/server-error');
   * Weather service
   */
 module.exports = {
-	name: 'weather',
+  name: 'weather',
 	actions: {
 		cities: {
 			rest: {
@@ -54,7 +54,7 @@ module.exports = {
 				path: '/city'
 			},
 			async handler(ctx) {
-        // check the search request
+        // check the city identifier
         const { params: { id = '' } = {} } = ctx;
         if (!id) {
           throw clientError(
@@ -70,6 +70,13 @@ module.exports = {
           });
           return formatResponse(data);
         } catch (error) {
+          const { response: { data: { detail = '' } = {} } = {} } = error;
+          if (detail && detail === 'Not found.') {
+            throw clientError(
+              config.ERROR_MESSAGES.invalidCityId,
+              config.RESPONSE_CODES[400],
+            );
+          }
           throw serverError(
             config.ERROR_MESSAGES.internalServerError,
             config.RESPONSE_CODES[500],
