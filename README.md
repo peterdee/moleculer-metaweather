@@ -2,35 +2,64 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/peterdee/moleculer-metaweather/badge.svg?targetFile=package.json)](https://snyk.io/test/github/peterdee/moleculer-metaweather?targetFile=package.json)
 
-This is a [Moleculer](https://moleculer.services/)-based microservices project. Generated with the [Moleculer CLI](https://moleculer.services/docs/0.14/moleculer-cli.html).
+A Moleculer-based microservice that pulls information from the MetaWeather service.
 
-### Usage
-Start the project with `npm run dev` command. 
-After starting, open the http://localhost:3000/ URL in your browser. 
-On the welcome page you can test the generated services via API Gateway and check the nodes & services.
+Generated with the [Moleculer CLI](https://moleculer.services/docs/0.14/moleculer-cli.html).
 
-In the terminal, try the following commands:
-- `nodes` - List all connected nodes.
-- `actions` - List all registered service actions.
-- `call greeter.hello` - Call the `greeter.hello` action.
-- `call greeter.welcome --name John` - Call the `greeter.welcome` action with the `name` parameter.
+Stack: [Moleculer](https://moleculer.services/).
 
+### Deploy
 
+Local [NATS](https://nats.io/) server is required:
 
-### Services
-- **api**: API Gateway services
-- **greeter**: Sample service with `hello` and `welcome` actions.
+```shell script
+brew install nats-server
+brew services start nats-server
+```
 
+NATS is used as a transport for the service communications.
 
-### Useful links
+```shell script
+git clone https://github.com/peterdee/moleculer-metaweather.git
+cd ./moleculer-metaweather
+nvm use 12.16.1
+npm i
+```
 
-* Moleculer website: https://moleculer.services/
-* Moleculer Documentation: https://moleculer.services/docs/0.14/
+### Environment variables
 
-### NPM scripts
+Create the `.env` file in the project root directory:
 
-- `npm run dev`: Start development mode (load all services locally with hot-reload & REPL)
-- `npm run start`: Start production mode (set `SERVICES` env variable to load certain services)
-- `npm run cli`: Start a CLI and connect to production. Don't forget to set production namespace with `--ns` argument in script
-- `npm run dc:up`: Start the stack with Docker Compose
-- `npm run dc:down`: Stop the stack with Docker Compose
+```shell script
+# Application
+APP_AUTH_ENABLED="true"
+APP_AUTH_SECRET=""
+PORT="5544"
+
+# Moleculer
+SERVICEDIR="services"
+```
+
+### Launch
+
+This will launch the services locally:
+
+```shell script
+npm run dev
+```
+
+### Build
+
+[Docker](https://www.docker.com/) and [Docker-Compose](https://docs.docker.com/compose/) are required for the build.
+
+Build and run the containers:
+
+```shell script
+npm run dc:up
+```
+
+Stop containers:
+
+```shell script
+npm run dc:down
+```
