@@ -48,6 +48,8 @@ This will launch the services locally:
 npm run dev
 ```
 
+Services will be available at http://localhost:5544 (you can change the `port` in the `.env` file).
+
 ### Build
 
 [Docker](https://www.docker.com/) and [Docker-Compose](https://docs.docker.com/compose/) are required for the build.
@@ -57,6 +59,8 @@ Build and run the containers:
 ```shell script
 npm run dc:up
 ```
+
+Services will be available at http://localhost:3000 (see the [`docker-compose.yml`](docker-compose.yml) file for details).
 
 Stop containers:
 
