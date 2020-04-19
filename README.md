@@ -8,6 +8,8 @@ Generated with the [Moleculer CLI](https://moleculer.services/docs/0.14/molecule
 
 Stack: [Moleculer](https://moleculer.services/).
 
+More information: https://www.youtube.com/watch?v=t4YR6MWrugw
+
 ### Deploy
 
 Local [NATS](https://nats.io/) server is required:
