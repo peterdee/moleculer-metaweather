@@ -3,8 +3,8 @@
 const axios = require('axios');
 
 const clientError = require('../utilities/client-error');
-const formatResponse = require('../utilities/format-response');
 const config = require('../config');
+const formatResponse = require('../utilities/format-response');
 const serverError = require('../utilities/server-error');
 
  /**

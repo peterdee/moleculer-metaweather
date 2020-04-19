@@ -6,7 +6,7 @@
     "name": "Peter Dyumin",
     "url": "https://github.com/peterdee"
   },
-  "description": "A Moleculer-based microservice that pulls information from the MetaWeather service",
+  "description": "A Moleculer-based microservice that pulls information from the MetaWeather",
   "homepage": "https://github.com/peterdee/moleculer-metaweather",
   "scripts": {
     "dev": "NODE_ENV=development moleculer-runner --env --repl --hot services/**/*.service.js",

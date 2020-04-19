@@ -21,5 +21,9 @@ module.exports = {
     404: 404,
     500: 500,
   },
+  RESPONSE_MESSAGES: {
+    ok: 'OK',
+    pingOk: 'PING_OK',
+  },
   PORT: Number(environment.PORT) || 5544,
 };
