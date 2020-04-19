@@ -7,6 +7,8 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
+RUN docker pull nats:latest
+
 RUN npm install --production
 
 COPY . .
