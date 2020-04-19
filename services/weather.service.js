@@ -68,6 +68,7 @@ module.exports = {
             method: 'GET',
             url: `https://www.metaweather.com/api/location/${id}`,
           });
+          data.svgLink = 'https://www.metaweather.com/static/img/weather/';
           return formatResponse(data);
         } catch (error) {
           const { response: { data: { detail = '' } = {} } = {} } = error;
