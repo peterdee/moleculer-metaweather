@@ -61,7 +61,7 @@ module.exports = {
      * @param {object} ctx - context object
      * @param {Object} route - route object
      * @param {object} request - request object
-     * @returns {Promise<MoleculerRetryableError|object>}
+     * @returns {Promise<MoleculerClientError|object>}
      */
     async authenticate(ctx, route, request) {
       // check if token was provided
