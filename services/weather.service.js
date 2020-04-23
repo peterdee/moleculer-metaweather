@@ -62,6 +62,12 @@ module.exports = {
             config.RESPONSE_CODES[400],
           );
         }
+        if (Number.isNaN(Number(id))) {
+          throw clientError(
+            config.ERROR_MESSAGES.invalidCityId,
+            config.RESPONSE_CODES[400],
+          );
+        }
 
         try {
           const { data } = await axios({

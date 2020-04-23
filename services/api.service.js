@@ -75,7 +75,7 @@ module.exports = {
 
       try {
         // decode the token
-        const decoded = await jwt.verify(auth, config.AUTH_SECRET);
+        const decoded = await jwt.verify(token, config.AUTH_SECRET);
         const { provider = '' } = decoded || {};
         if (!provider) {
           throw clientError(
