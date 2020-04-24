@@ -8,7 +8,7 @@ const formatResponse = require('../utilities/format-response');
 const serverError = require('../utilities/server-error');
 
  /**
-  * Weather service
+  * Data service
   */
 module.exports = {
   name: 'data',
