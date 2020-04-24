@@ -26,6 +26,6 @@ const response = await axios({
     'X-AUTH': token,
   }
   method: 'GET',
-  url: 'http://localhost:5544/api/weather/cities?search=london',
+  url: 'http://localhost:5544/api/data/search?query=london',
 });
 ```
