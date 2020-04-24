@@ -11,20 +11,20 @@ const serverError = require('../utilities/server-error');
   * Weather service
   */
 module.exports = {
-  name: 'weather',
+  name: 'data',
 	actions: {
-		cities: {
+		search: {
 			rest: {
         method: 'GET',
         params: {
-          search: 'string',
+          query: 'string',
         },
-				path: '/cities'
+				path: '/search'
 			},
 			async handler(ctx) {
-        // check the search request
-        const { params: { search = '' } = {} } = ctx;
-        if (!search) {
+        // check the search query
+        const { params: { query = '' } = {} } = ctx;
+        if (!query) {
           throw clientError(
             config.ERROR_MESSAGES.missingData,
             config.RESPONSE_CODES[400],
@@ -34,7 +34,7 @@ module.exports = {
         try {
           const { data = [] } = await axios({
             method: 'GET',
-            url: `https://www.metaweather.com/api/location/search/?query=${search}`,
+            url: `https://www.metaweather.com/api/location/search/?query=${query}`,
           });
           return formatResponse(data);
         } catch (error) {
@@ -45,13 +45,13 @@ module.exports = {
         }
 			},
     },
-    city: {
+    location: {
 			rest: {
         method: 'GET',
         params: {
-          search: 'string',
+          id: 'string',
         },
-				path: '/city'
+				path: '/location'
 			},
 			async handler(ctx) {
         // check the city identifier
@@ -64,7 +64,7 @@ module.exports = {
         }
         if (Number.isNaN(Number(id))) {
           throw clientError(
-            config.ERROR_MESSAGES.invalidCityId,
+            config.ERROR_MESSAGES.invalidLocationId,
             config.RESPONSE_CODES[400],
           );
         }
@@ -80,7 +80,7 @@ module.exports = {
           const { response: { data: { detail = '' } = {} } = {} } = error;
           if (detail && detail === 'Not found.') {
             throw clientError(
-              config.ERROR_MESSAGES.invalidCityId,
+              config.ERROR_MESSAGES.invalidLocationId,
               config.RESPONSE_CODES[400],
             );
           }
