@@ -18,6 +18,18 @@ services:
     networks:
       - internal
 
+  data:
+    build:
+      context: .
+    image: moleculer-metaweather
+    env_file: docker-compose.env
+    environment:
+      SERVICES: data
+    depends_on:
+      - nats
+    networks:
+      - internal
+
   ping:
     build:
       context: .
@@ -25,18 +37,6 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: ping
-    depends_on:
-      - nats
-    networks:
-      - internal
-
-  weather:
-    build:
-      context: .
-    image: moleculer-metaweather
-    env_file: docker-compose.env
-    environment:
-      SERVICES: weather
     depends_on:
       - nats
     networks:

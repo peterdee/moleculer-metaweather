@@ -1,6 +1,6 @@
 ### APIS
 
-#### `api/ping` - `[GET]`
+#### `/api/ping` - `[GET]`
 
 Ping the microservice.
 
@@ -14,12 +14,12 @@ Ping the microservice.
 }
 ```
 
-#### `api/weather/cities?search={city}` - `[GET]`
+#### `/api/data/search?query={query}` - `[GET]`
 
-Get the list of the cities by city name
+Get the list of the locations
 
 ```json
-// http://localhost:5544/api/weather/cities?search=fran
+// http://localhost:5544/api/data/search?query==fran
 
 {
   "datetime": 1587243203808,
@@ -42,14 +42,14 @@ Get the list of the cities by city name
 }
 ```
 
-The `woeid` propery is a unique identifier or the city, and it is used to get the detailed information about the current weather in the city.
+The `woeid` propery is a unique identifier or the location.
 
-#### `api/weather/city?id={cityId}` - `[GET]`
+#### `/api/data/location?id={locationId}` - `[GET]`
 
 Get a detailed information about the weather by the city unique identifier (`woeid`).
 
 ```json
-// http://localhost:5544/api/weather/city?id=2487956
+// http://localhost:5544/api/data/location?id=2487956
 
 {
   "datetime": 1587243507104,
@@ -225,14 +225,14 @@ Get a detailed information about the weather by the city unique identifier (`woe
 
 The weather data is provided from several different sources.
 
-You will get an error if you provide an invalid city identifier:
+You will get an error if you provide an invalid location identifier:
 
 ```json
-// http://localhost:5544/api/weather/city?id=123
+// http://localhost:5544/api/data/location?id=123
 
 {
   "name": "MoleculerClientError",
-  "message": "INVALID_CITY_ID",
+  "message": "INVALID_LOCATION_ID",
   "code": 400
 }
 ```
