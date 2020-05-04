@@ -36,7 +36,13 @@ module.exports = {
             method: 'GET',
             url: `https://www.metaweather.com/api/location/search/?query=${query}`,
           });
-          return formatResponse(data);
+
+          // make sure that only cities left in the array
+          const cities = data.length > 0
+            ? data.filter((item) => item.location_type === 'City')
+            : [];
+
+          return formatResponse(cities);
         } catch (error) {
           throw serverError(
             config.ERROR_MESSAGES.internalServerError,
