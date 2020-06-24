@@ -10,6 +10,10 @@ Stack: [Node](https://nodejs.org/), [Moleculer](https://moleculer.services/).
 
 More information: https://www.youtube.com/watch?v=t4YR6MWrugw
 
+DEV: http://localhost:5544
+
+STAGE: https://moleculer-metaweather.herokuapp.com
+
 ### Deploy
 
 ```shell script
@@ -50,6 +54,10 @@ Stop containers:
 ```shell script
 npm run dc:down
 ```
+
+### Heroku
+
+The `staging` branch is deployed to Heroku automatically.
 
 ### Authentication
 
