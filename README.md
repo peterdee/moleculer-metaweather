@@ -6,41 +6,22 @@ A Moleculer-based microservice that pulls information from the [MetaWeather](htt
 
 Generated with the [Moleculer CLI](https://moleculer.services/docs/0.14/moleculer-cli.html).
 
-Stack: [Moleculer](https://moleculer.services/).
+Stack: [Node](https://nodejs.org/), [Moleculer](https://moleculer.services/).
 
 More information: https://www.youtube.com/watch?v=t4YR6MWrugw
 
 ### Deploy
 
-Local [NATS](https://nats.io/) server is required:
-
-```shell script
-brew install nats-server
-brew services start nats-server
-```
-
-NATS is used as a transport for the service communications.
-
 ```shell script
 git clone https://github.com/peterdee/moleculer-metaweather.git
 cd ./moleculer-metaweather
-nvm use 12.16.1
+nvm use 14.4.0
 npm i
 ```
 
 ### Environment variables
 
-Create the `.env` file in the project root directory:
-
-```shell script
-# Application
-APP_AUTH_ENABLED="true"
-APP_AUTH_SECRET="mysecret"
-PORT="5544"
-
-# Moleculer
-SERVICEDIR="services"
-```
+The `.env` file is required. See the [.env.example](.env.example) for more details.
 
 ### Launch
 
