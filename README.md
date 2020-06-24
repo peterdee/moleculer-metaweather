@@ -12,15 +12,6 @@ More information: https://www.youtube.com/watch?v=t4YR6MWrugw
 
 ### Deploy
 
-Local [NATS](https://nats.io/) server is required:
-
-```shell script
-brew install nats-server
-brew services start nats-server
-```
-
-NATS is used as a transport for the service communications.
-
 ```shell script
 git clone https://github.com/peterdee/moleculer-metaweather.git
 cd ./moleculer-metaweather
